@@ -64,7 +64,7 @@ object SimpleSpark extends App {
     // Longest Common Substring Search
     //------------------------------------------------------------------------------------------------------------------
 
-    time {LongestCommonSubstring.discoverLCSs("students2", spark)}
+    //time {LongestCommonSubstring.discoverLCSs("students2", spark)}
 
     //------------------------------------------------------------------------------------------------------------------
     // Inclusion Dependency Discovery (Homework)
