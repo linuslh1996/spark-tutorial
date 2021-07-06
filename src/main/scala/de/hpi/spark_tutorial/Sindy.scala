@@ -1,6 +1,5 @@
 package de.hpi.spark_tutorial
 
-import org.apache.spark.sql
 import org.apache.spark.sql.SparkSession
 
 
@@ -20,10 +19,14 @@ object Sindy {
     // Output (value, col) Tuples
     val valueColumnPairs = data.map(df => {
       val cols = df.columns
-      val newData = df.flatMap(row => List.range(0, cols.length).map(i => (row.getString(i), cols(i))))
-      newData
-    })
-    val flattenedPairs = valueColumnPairs.reduce((combined, newPair) => combined.union(newPair))
+      df.flatMap(row => {
+        for (i <- cols.indices) yield {
+          (row.getString(i), cols(i))
+        }
+      })// <- dataset
+    }) // <- list of datasets
+    //combine results from files into a single rdd
+    val flattenedPairs = valueColumnPairs.reduce((combined, newPair) => combined.union(newPair)).distinct()
 
     // Create Attribute Groups
     val attributeGroups = flattenedPairs
@@ -41,7 +44,7 @@ object Sindy {
       .mapGroups((key, iterator) => (key, iterator
         .map(t => t._2)
         .reduce((intersected, newCandidate) => intersected.intersect(newCandidate))))
-      .filter(t => !t._2.isEmpty)
+      .filter(t => t._2.nonEmpty)
 
     // Output to Console
     val sorted = allINDs.sort("_1")
@@ -54,21 +57,5 @@ object Sindy {
       println(rowToString(line))
     }
 
-    //sorted.foldLeft((stringToPrint, t) => stringToPrint + "\n" + "")
-
-    //val changedDataframe = data.map(df => df.map(row => row.toSeq)
-    //changedDataframe.foreach(df => df.show())
-
-    // preconsolidate tuples
-
-    // global consolidation
-    // -> how is it distributed again? does it stay local?
-
-    // drop value (maybe does not need to be its own step)
-    // Take attribute groups -> IND candidates
-
-    // Preconsolidate intersection of candidates
-    // global consolidation
-    // output result
   }
 }
