@@ -58,7 +58,7 @@ object SimpleSpark extends App {
     // Spark Tutorial
     //------------------------------------------------------------------------------------------------------------------
 
-    Tutorial.execute(spark)
+    //Tutorial.execute(spark)
 
     //------------------------------------------------------------------------------------------------------------------
     // Longest Common Substring Search
@@ -70,6 +70,7 @@ object SimpleSpark extends App {
     // Inclusion Dependency Discovery (Homework)
     //------------------------------------------------------------------------------------------------------------------
 
+    //val inputs = List("region", "nation", "customer", "orders")
     val inputs = List("region", "nation", "supplier", "customer", "part", "lineitem", "orders")
       .map(name => s"$path/tpch_$name.csv")
 
